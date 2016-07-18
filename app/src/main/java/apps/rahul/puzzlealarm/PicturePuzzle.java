@@ -32,10 +32,27 @@ public class PicturePuzzle {
     }
 
 
+    private void swapCoordinates()
+    {
+        this.blocks[currentMovingY][currentMovingX].xCoordinate =
+                this.blocks[currentMovingY][currentMovingX].xCoordinate ^ this.blocks[moveToEmptyY][moveToEmptyX].xCoordinate;
+        this.blocks[moveToEmptyY][moveToEmptyX].xCoordinate  = this.blocks[currentMovingY][currentMovingX].xCoordinate ^ this.blocks[moveToEmptyY][moveToEmptyX].xCoordinate;
+        this.blocks[currentMovingY][currentMovingX].xCoordinate =  this.blocks[currentMovingY][currentMovingX].xCoordinate ^ this.blocks[moveToEmptyY][moveToEmptyX].xCoordinate;
+        this.blocks[currentMovingY][currentMovingX].yCoordinate =
+                this.blocks[currentMovingY][currentMovingX].yCoordinate ^ this.blocks[moveToEmptyY][moveToEmptyX].yCoordinate;
+        this.blocks[moveToEmptyY][moveToEmptyX].yCoordinate  = this.blocks[currentMovingY][currentMovingX].yCoordinate ^ this.blocks[moveToEmptyY][moveToEmptyX].yCoordinate;
+        this.blocks[currentMovingY][currentMovingX].yCoordinate =  this.blocks[currentMovingY][currentMovingX].yCoordinate ^ this.blocks[moveToEmptyY][moveToEmptyX].yCoordinate;
+
+
+    }
+
+
     private void modifyPicturePuzzle(List<Block.Direction> directions)
     {
+        boolean flag = false;
         for(Block.Direction direction: directions)
         {
+            Log.d(PuzzleActivity.TAG, "Checking for dir = " + direction);
             switch(direction)
             {
                 case Left:
@@ -58,7 +75,14 @@ public class PicturePuzzle {
                             currentMovingY = moveToEmptyY + 1;
                             swapBlocks();
                             break;
+                case None:  flag = true;
+                            break;
+                default: flag = true;
+                            break;
+
             }
+            if(!flag)
+                swapCoordinates();
         }
     }
 
@@ -144,6 +168,7 @@ public class PicturePuzzle {
     }
 
 
+
     public void swapBlocks(){
  //       Log.d(PuzzleActivity.TAG, "Swap blocks");
         Log.d(PuzzleActivity.TAG, "Current = r,c= (" + currentMovingY + "," + currentMovingX + ") to" +
@@ -182,9 +207,17 @@ public class PicturePuzzle {
         this.puzzleGenerator = puzzleGenerator;
         puzzleGenerator.generateRandomPuzzleInstance();
        // this.blocks[1][2].isBlank = true;
-       // this.modifyPicturePuzzle(puzzleGenerator.getSwapDirections());
+        this.modifyPicturePuzzle(puzzleGenerator.getSwapDirections());
     }
 
+
+    private void tempSwap()
+        {
+            currentMovingX = 2;
+            currentMovingY = 1;
+            swapBlocks();
+            swapCoordinates();
+        }
 
     public void update(){
         for(int i = 0; i < dimension; i++)

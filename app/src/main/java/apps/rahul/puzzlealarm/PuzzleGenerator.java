@@ -45,7 +45,7 @@ public class PuzzleGenerator {
 
 
     public List<Block.Direction> getSwapDirections(){
-        return this.directionList;
+        return this.moves;
     }
 
 
