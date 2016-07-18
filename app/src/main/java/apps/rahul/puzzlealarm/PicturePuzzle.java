@@ -4,9 +4,9 @@ package apps.rahul.puzzlealarm;
 import  java.util.List;
 import android.graphics.Bitmap;
 import android.util.Log;
-import java.util.ArrayList;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
+import com.
 
 /**
  * Created by Rahul on 7/15/2016.
@@ -125,9 +125,6 @@ public class PicturePuzzle {
 
     private Block.Direction determineIfWhetherToMove(int r, int c)
     {
-        // x,y refer to the matrices, but moveToEmptyX, moveToEmptyY refer
-        // to the coordinate on the
-
         if (this.blocks[r][c].isBlank)
             return Block.Direction.None;
         if(moveToEmptyY == r +1){
