@@ -11,6 +11,8 @@ import android.view.MotionEvent;
 /**
  * Created by Rahul on 7/15/2016.
  */
+
+
 public class PicturePuzzle {
 
     public Block[][] blocks = null;
@@ -19,11 +21,47 @@ public class PicturePuzzle {
     private int width;
     private int height;
     private int fps;
+    private int blankX;
+    private int blankY;
+    private PuzzleGenerator puzzleGenerator;
+
 
     private Bitmap scaledBitmap(Bitmap  bitmap, int newWidth, int newHeight)
     {
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
     }
+
+
+    private void modifyPicturePuzzle(List<Block.Direction> directions)
+    {
+        for(Block.Direction direction: directions)
+        {
+            switch(direction)
+            {
+                case Left:
+                            currentMovingX = moveToEmptyX  - 1;
+                            currentMovingY  = moveToEmptyY;
+                            swapBlocks();
+                            break;
+                case Right:
+                            currentMovingX = moveToEmptyX+ 1;
+                            currentMovingY = moveToEmptyY;
+                            swapBlocks();
+                            break;
+                case Up:
+                            currentMovingY = moveToEmptyY- 1;
+                            currentMovingX = moveToEmptyX;
+                            swapBlocks();
+                            break;
+                case Down:
+                            currentMovingX = moveToEmptyX;
+                            currentMovingY = moveToEmptyY + 1;
+                            swapBlocks();
+                            break;
+            }
+        }
+    }
+
 
 
     private void initBlocks(int dimension){
@@ -53,6 +91,7 @@ public class PicturePuzzle {
         }
         this.blocks[dimension - 1][dimension - 1].isBlank = true;
     }
+
 
     private int moveToEmptyX = 2;
     private int moveToEmptyY = 2;
@@ -90,24 +129,19 @@ public class PicturePuzzle {
         float yCoordinate = event.getY();
         int x = (int)xCoordinate/(this.width/dimension);
         int y =(int) yCoordinate/(this.height/dimension);
-        Log.d(PuzzleActivity.TAG, "denomX = " +  this.width/dimension
-                 + " and denomY = " + this.height/dimension);
-
-        Log.d(PuzzleActivity.TAG, "x  " + x  + " and y = " + y);
-        Log.d(PuzzleActivity.TAG, "Empt.y Space: (" + moveToEmptyX + ", " + moveToEmptyY + ")");
-        this.blocks[x][y].isMoving = true;
+        this.blocks[y][x].isMoving = true;
         currentMovingX = x;
         currentMovingY = y;
-        Block.Direction toMoveIn = determineIfWhetherToMove(x, y);
+        Block.Direction toMoveIn = determineIfWhetherToMove(y, x); // y is the row, x is the column
         if(toMoveIn != Block.Direction.None)
             transitionState = true;
-        this.blocks[x][y].directionOfMotion = toMoveIn;
+        this.blocks[y][x].directionOfMotion = toMoveIn;
 
     }
 
 
     public void swapBlocks(){
-        Log.d(PuzzleActivity.TAG, "Swap blocks");
+ //       Log.d(PuzzleActivity.TAG, "Swap blocks");
         Log.d(PuzzleActivity.TAG, "Current = (" + currentMovingX + "," + currentMovingY + ") to" +
                 " (" + moveToEmptyX + "," + moveToEmptyY + ")");
         Block b = this.blocks[currentMovingX][currentMovingY];
@@ -118,17 +152,16 @@ public class PicturePuzzle {
         currentMovingX = currentMovingX ^ moveToEmptyX;
         moveToEmptyX  = currentMovingX ^ moveToEmptyX;
         currentMovingX =  currentMovingX ^ moveToEmptyX;
-
         currentMovingY = currentMovingY ^ moveToEmptyY;
         moveToEmptyY  = currentMovingY ^ moveToEmptyY;
         currentMovingY =  currentMovingY ^ moveToEmptyY;
 
-        Log.d(PuzzleActivity.TAG, "After swapping, Current = (" + currentMovingX + "," + currentMovingY + ") to" +
-                " (" + moveToEmptyX + "," + moveToEmptyY + ")");
+   //     Log.d(PuzzleActivity.TAG, "After swapping, Current = (" + currentMovingX + "," + currentMovingY + ") to" +
+    //            " (" + moveToEmptyX + "," + moveToEmptyY + ")");
         transitionState = false;
     }
 
-    public PicturePuzzle(Bitmap bitmapToShow, int width, int height, int dimension, int fps)
+    public PicturePuzzle(Bitmap bitmapToShow, int width, int height, int dimension, int fps, PuzzleGenerator puzzleGenerator)
     {
         Log.d(PuzzleActivity.TAG, "Init model");
         Log.d(PuzzleActivity.TAG, "In constructor, Height = " + height + " and width = " + width);
@@ -138,6 +171,11 @@ public class PicturePuzzle {
         this.dimension = dimension;
         this.fps = fps;
         this.initBlocks(dimension);
+        this.moveToEmptyX = dimension - 1;
+        this.moveToEmptyY = dimension  - 1;
+        this.puzzleGenerator = puzzleGenerator;
+        puzzleGenerator.generateRandomPuzzleInstance();
+        this.modifyPicturePuzzle(puzzleGenerator.getSwapDirections());
     }
 
 

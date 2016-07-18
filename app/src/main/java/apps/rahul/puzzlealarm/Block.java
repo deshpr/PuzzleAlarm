@@ -26,7 +26,7 @@ public class Block extends GameComponent{
     public int maxY;
     public int minX;
     public int minY;
-   public int fps;
+    public int fps;
     private int incX = 0;
     private int incY = 0;
 
@@ -35,11 +35,18 @@ public class Block extends GameComponent{
         this.picturePuzzle = puzzle;
     }
 
+
     private void calculateAdvancements(){
 
-        this.incX = this.blockWidth/fps;
-        this.incY = this.blockHeight/fps;
-      //  Log.d(PuzzleActivity.TAG, "Advancements are x = " +  this.incX + " and y = " + this.incY);
+        int xDistance = this.blockWidth/fps;
+        int yDistance = this.blockWidth/fps;
+        this.incX = this.advanceX + this.blockWidth/fps  > this.blockWidth ?
+                        this.blockWidth - this.advanceX : xDistance;
+
+        this.incY = this.advanceY + this.blockHeight/fps  > this.blockHeight ?
+                this.blockHeight - this.advanceY : yDistance;
+
+     //     Log.d(PuzzleActivity.TAG, "Advancements are x = " +  this.incX + " and y = " + this.incY);
     }
 
     public enum Direction {
@@ -47,17 +54,25 @@ public class Block extends GameComponent{
         Right,
         Up,
         Down,
-        None
+        None;
+//
+//        @Override
+//        public String toString(){
+//            switch(this){
+//                case Left: return "Left";
+//                case Right: return  "Right";
+//                case Up: return
+//            }
+//        }
     }
 
     private int advanceX = 0;
     private int advanceY = 0;
 
-    private void advancePosition(){
-        this.calculateAdvancements();
+
+    private void modifyCoordinatesBasedonDirection(){
         switch(directionOfMotion){
             case Left:
-
                 if(xCoordinate > 0){
                     xCoordinate -= incX;
                     advanceX+=incX;
@@ -82,7 +97,12 @@ public class Block extends GameComponent{
                 }
                 break;
         }
+    }
 
+
+    private void advancePosition(){
+        this.calculateAdvancements();
+        this.modifyCoordinatesBasedonDirection();
     }
 
 
@@ -116,8 +136,6 @@ public class Block extends GameComponent{
     @Override
     public void draw(Canvas canvas){
         Paint paint = new Paint();
-
-    //    Log.d(PuzzleActivity.TAG, "Draw a block");
         if(isBlank){
             paint.setColor(Color.WHITE);
         }

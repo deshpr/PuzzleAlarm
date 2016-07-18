@@ -13,25 +13,38 @@ import android.view.View;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
+import java.util.List;
+
 public  class PuzzleCanvas extends SurfaceView implements Runnable {
 
-
+    private PuzzleGenerator  puzzleGenerator;
     private PicturePuzzle picturePuzzle;
     private SurfaceHolder puzzleGameSurfaceHolder;
     private Paint gameCanvasPaint;
     Thread puzzleGameThread;
     Canvas imageCanvas;
     private final int puzzleDimension = 3;
+    private int canvasWidth;
+    private int canvasHeight;
+    private  volatile boolean _isPlaying =  true;
 
-     private  volatile boolean _isPlaying =  true;
+    private int game_FPS = 10;
 
 
-    private int game_FPS = 60;
+    long FRAMES_SKIPPED = 5;
+    long beginTime;
+    long endTime;
+    long sleepTime;
+    int framesSkipped;
+    private static final int FRAME_TIME = 17; // 1000/60 ~= 17
+
+    private Bitmap bitmapToShuffle;
 
 
     public PuzzleCanvas(int fps, Context context){
         this(context);
         this.game_FPS = fps;
+
     }
 
      public PuzzleCanvas(Context context)
@@ -39,7 +52,6 @@ public  class PuzzleCanvas extends SurfaceView implements Runnable {
         super(context);
          puzzleGameSurfaceHolder =  getHolder();
          gameCanvasPaint  = new Paint();
-
      }
 
     public void startGame(Bitmap bitmap){
@@ -47,23 +59,49 @@ public  class PuzzleCanvas extends SurfaceView implements Runnable {
         this.initialize(bitmap);
     }
 
-     public PuzzleCanvas(Context context, AttributeSet attributeSet){
+    public PuzzleCanvas(Context context, AttributeSet attributeSet){
          super(context, attributeSet);
-     }
+    }
 
 
-    private Bitmap bitmapToShuffle;
+    private  boolean obtainedSize(){
+        canvasWidth= this.getHolder().getSurfaceFrame().width();
+        canvasHeight = this.getHolder().getSurfaceFrame().height();
+        return canvasWidth != 0 && canvasHeight != 0;
+    }
 
      @Override
      public void run(){
          Log.d(PuzzleActivity.TAG, "Run");
-         Rect parentFrame = this.getHolder().getSurfaceFrame();
-         int width = this.getHolder().getSurfaceFrame().width();
-         int height = this.getHolder().getSurfaceFrame().height();
-         picturePuzzle = new PicturePuzzle(bitmapToShuffle,  984,1581, puzzleDimension, game_FPS);
+         while(!obtainedSize());
+         picturePuzzle = new PicturePuzzle(bitmapToShuffle,
+                 canvasWidth,canvasHeight, puzzleDimension, game_FPS, puzzleGenerator);
          while(_isPlaying){
+             beginTime = System.currentTimeMillis();
+             framesSkipped = 0;
+
              update();
              draw();
+             endTime = System.currentTimeMillis();
+             sleepTime = FRAME_TIME - endTime;/*
+             if(sleepTime > 0)
+             {
+                 try{
+                     this.puzzleGameThread.sleep(sleepTime);
+                 }
+                 catch(InterruptedException ex)
+                 {
+
+                 }
+                 // we 're good.
+             }
+             else{
+                 while(sleepTime <0 && framesSkipped > FRAMES_SKIPPED){
+                     this.update();
+                     sleepTime += FRAME_TIME;
+                     framesSkipped++;
+                 }
+             }*/
              controlLoopSpeed();
          }
      }
@@ -88,6 +126,7 @@ public  class PuzzleCanvas extends SurfaceView implements Runnable {
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.d(PuzzleActivity.TAG, "Moved screen");
+                Log.d(PuzzleActivity.TAG, "Moved screen");
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d(PuzzleActivity.TAG, "Took finger up");
@@ -96,9 +135,14 @@ public  class PuzzleCanvas extends SurfaceView implements Runnable {
         return true;
     }
 
+
     private void initialize(Bitmap bitmapToShuffle){
         Log.d(PuzzleActivity.TAG, "Initialize");
         this.bitmapToShuffle = bitmapToShuffle;
+        Log.d(PuzzleActivity.TAG, "Creating the generator");
+        puzzleGenerator = new PuzzleGenerator(puzzleDimension, 2, 2);
+        puzzleGenerator.generateRandomPuzzleInstance();
+        //  while(!obtainedSize()); // wait to get the  size.
         puzzleGameThread = new Thread(this);
         puzzleGameThread.start();
     }
@@ -112,13 +156,13 @@ public  class PuzzleCanvas extends SurfaceView implements Runnable {
     private boolean determinedSize = false;
 
     private void draw(){
-       // Log.d(PuzzleActivity.TAG, "Draw");
 
         if(puzzleGameSurfaceHolder.getSurface().isValid())
         {
             imageCanvas = puzzleGameSurfaceHolder.lockCanvas();
             imageCanvas.drawColor(Color.argb(255,0,0,0));
-//            Log.d(PuzzleActivity.TAG, "Height = " + this.getHeight() + " and wirh = "  + this.getWidth());
+//            Log.d(PuzzleActivity.TAG, "Height = " + imageCanvas.getHeight() + " and wirh = "  +
+//                        imageCanvas.getWidth());
             gameCanvasPaint.setColor(Color.RED);
             picturePuzzle.draw(imageCanvas);
             imageCanvas.drawLine(100, 100, 200, 200, gameCanvasPaint);
