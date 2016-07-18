@@ -165,7 +165,7 @@ public  class PuzzleCanvas extends SurfaceView implements Runnable {
 //                        imageCanvas.getWidth());
             gameCanvasPaint.setColor(Color.RED);
             picturePuzzle.draw(imageCanvas);
-            imageCanvas.drawLine(100, 100, 200, 200, gameCanvasPaint);
+            imageCanvas.drawLine(10, 50, 200, 200, gameCanvasPaint);
             puzzleGameSurfaceHolder.unlockCanvasAndPost(imageCanvas);
         }
 

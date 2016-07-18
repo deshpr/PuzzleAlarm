@@ -72,20 +72,20 @@ public class PicturePuzzle {
         for(int i = 0; i < dimension; i++){
             for(int j = 0; j < dimension; j++){
                 Block b =  new Block(this);
-                b.bitmapImage = Bitmap.createBitmap(this.puzzleBitmap,i * blockWidth ,
-                            j * blockHeight , blockWidth - 1, blockHeight - 1);
+                b.bitmapImage = Bitmap.createBitmap(this.puzzleBitmap, j* blockWidth ,
+                            i * blockHeight , blockWidth - 1, blockHeight - 1);
                 b.blockWidth = blockWidth;
                 b.blockHeight = blockHeight;
-                b.x = i;
-                b.y = j;
+                b.x = j;
+                b.y = i;
                 b.directionOfMotion = Block.Direction.None;
                 b.maxX = this.width;
                 b.maxY = this.height;
                 b.minX = 0;
                 b.minY = 0;
                 b.fps = fps;
-                b.xCoordinate = blockWidth * i;
-                b.yCoordinate = blockHeight * j;
+                b.xCoordinate = blockWidth * j;
+                b.yCoordinate = blockHeight * i;
                 this.blocks[i][j] = b;
             }
         }
@@ -99,18 +99,21 @@ public class PicturePuzzle {
     private int currentMovingY;
 
 
-    private Block.Direction determineIfWhetherToMove(int x, int y)
+    private Block.Direction determineIfWhetherToMove(int r, int c)
     {
-        if (this.blocks[x][y].isBlank)
+        // x,y refer to the matrices, but moveToEmptyX, moveToEmptyY refer
+        // to the coordinate on the
+
+        if (this.blocks[r][c].isBlank)
             return Block.Direction.None;
-        if(moveToEmptyY == y +1){
+        if(moveToEmptyY == r +1){
             return Block.Direction.Down;
         }
-        else if(moveToEmptyY == y - 1){
+        else if(moveToEmptyY == r - 1){
             return Block.Direction.Up;
-        }else if(moveToEmptyX == x + 1){
+        }else if(moveToEmptyX == c + 1){
             return Block.Direction.Right;
-        }else if(moveToEmptyX == x - 1)
+        }else if(moveToEmptyX == c - 1)
         {
          return  Block.Direction.Left;
         }
@@ -124,13 +127,14 @@ public class PicturePuzzle {
     {
         if(transitionState)
             return;
-
         float xCoordinate = event.getX();
         float yCoordinate = event.getY();
         int x = (int)xCoordinate/(this.width/dimension);
         int y =(int) yCoordinate/(this.height/dimension);
+        Log.d(PuzzleActivity.TAG, "Tapped at R  = " + y + " ad C = " + x);
+        Log.d(PuzzleActivity.TAG, "Blankr = " + moveToEmptyY + " and bank c - " + moveToEmptyX);
         this.blocks[y][x].isMoving = true;
-        currentMovingX = x;
+        currentMovingX = x; // for matrix reference.
         currentMovingY = y;
         Block.Direction toMoveIn = determineIfWhetherToMove(y, x); // y is the row, x is the column
         if(toMoveIn != Block.Direction.None)
@@ -142,11 +146,13 @@ public class PicturePuzzle {
 
     public void swapBlocks(){
  //       Log.d(PuzzleActivity.TAG, "Swap blocks");
-        Log.d(PuzzleActivity.TAG, "Current = (" + currentMovingX + "," + currentMovingY + ") to" +
-                " (" + moveToEmptyX + "," + moveToEmptyY + ")");
-        Block b = this.blocks[currentMovingX][currentMovingY];
-        this.blocks[currentMovingX][currentMovingY]  = this.blocks[moveToEmptyX][moveToEmptyY];
-        this.blocks[moveToEmptyX][moveToEmptyY] = b;
+        Log.d(PuzzleActivity.TAG, "Current = r,c= (" + currentMovingY + "," + currentMovingX + ") to" +
+                " (" + moveToEmptyY + "," + moveToEmptyX + ")");
+        // When using as index in matrix, the x is the column number,
+        // amd y is the row number.
+        Block b = this.blocks[currentMovingY][currentMovingX];
+        this.blocks[currentMovingY][currentMovingX]  = this.blocks[moveToEmptyY][moveToEmptyX];
+        this.blocks[moveToEmptyY][moveToEmptyX] = b;
         // Implement XOR operation swapping
         // Swap Xs so moveToEmpty refers to the latest one.
         currentMovingX = currentMovingX ^ moveToEmptyX;
@@ -156,8 +162,8 @@ public class PicturePuzzle {
         moveToEmptyY  = currentMovingY ^ moveToEmptyY;
         currentMovingY =  currentMovingY ^ moveToEmptyY;
 
-   //     Log.d(PuzzleActivity.TAG, "After swapping, Current = (" + currentMovingX + "," + currentMovingY + ") to" +
-    //            " (" + moveToEmptyX + "," + moveToEmptyY + ")");
+        Log.d(PuzzleActivity.TAG, "After swapping, r,c = (" + currentMovingY + "," + currentMovingX + ") to" +
+                " (" + moveToEmptyY + "," + moveToEmptyX + ")");
         transitionState = false;
     }
 
@@ -175,7 +181,8 @@ public class PicturePuzzle {
         this.moveToEmptyY = dimension  - 1;
         this.puzzleGenerator = puzzleGenerator;
         puzzleGenerator.generateRandomPuzzleInstance();
-        this.modifyPicturePuzzle(puzzleGenerator.getSwapDirections());
+       // this.blocks[1][2].isBlank = true;
+       // this.modifyPicturePuzzle(puzzleGenerator.getSwapDirections());
     }
 
 
