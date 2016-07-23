@@ -46,6 +46,8 @@ dependencies {
 
 
     compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.android.volley:volley:1.0.0'
+    /*
     compile ('com.google.gdata:core:1.47.1')
 //    compile ('com.google.api-client:google-api-client:1.23.0')
             {
@@ -55,4 +57,5 @@ dependencies {
                 exclude (group: 'com.google.android', module: 'android')
                 exclude (group: 'com.google.android.google-play-services', module: 'google-play-services')
             }
+            */
 }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+/*
 import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.data.photos.AlbumEntry;
 import com.google.gdata.data.photos.GphotoEntry;
@@ -32,19 +33,19 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gdata.util.ServiceException;
 import com.google.gdata.data.photos.UserFeed;
-
+*/
 import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+//import javax.annotation.ParametersAreNonnullByDefault;
 
 
-public class GoogleLogin extends AppCompatActivity implements  OnConnectionFailedListener, View.OnClickListener{
+public class GoogleLogin extends AppCompatActivity /*implements  OnConnectionFailedListener, View.OnClickListener*/{
 
-
+/*
     private final int SIGN_IN = 111;
     private String userId;
     private GoogleSignInOptions options;
@@ -199,5 +200,5 @@ public class GoogleLogin extends AppCompatActivity implements  OnConnectionFaile
     {
         Log.d(PuzzleActivity.TAG, "Google connection failed = " + result.toString());
     }
-
+  */
 }
