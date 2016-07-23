@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import com.
 
 /**
  * Created by Rahul on 7/15/2016.

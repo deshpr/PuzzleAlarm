@@ -1,9 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'releaseapps'
+            keyPassword 'RahulDeshpande123'
+            storeFile file('C:/Users/Rahul/keystores/android.jks')
+            storePassword 'RahulDeshpande123'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "apps.rahul.puzzlealarm"
         minSdkVersion 15
@@ -15,6 +23,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -23,6 +32,27 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+
+    compile('com.onedrive.sdk:onedrive-sdk-android:1.2+') {
+        transitive = false
+    }
+    // include gson
+    compile 'com.google.code.gson:gson:2.3.1'
+    // Incldue authentication methods supported for app
+    compile 'com.microsoft.services.msa:msa-auth:0.8+'
+    compile 'com.microsoft.aad:adal:1.1+'
+
+
+    compile 'com.google.android.gms:play-services:8.3.0'
+    compile ('com.google.gdata:core:1.47.1')
+//    compile ('com.google.api-client:google-api-client:1.23.0')
+            {
+                exclude (group: 'xpp3', module: 'xpp3')
+                exclude (group: 'org.apache.httpcomponents', module: 'httpclient')
+                exclude (group: 'junit', module: 'junit')
+                exclude (group: 'com.google.android', module: 'android')
+                exclude (group: 'com.google.android.google-play-services', module: 'google-play-services')
+            }
 }

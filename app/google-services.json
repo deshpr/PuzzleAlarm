@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "712869220822",
+    "project_id": "firebase-puzzlealarm"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712869220822:android:00ce7ce335c19a83",
+        "android_client_info": {
+          "package_name": "apps.rahul.puzzlealarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712869220822-90u0ktu7khu9fqt0qq91fa1ni5v0hf46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "apps.rahul.puzzlealarm",
+            "certificate_hash": "D17EB7CB2E42416EF7FBAECD810FCC54672BE76A"
+          }
+        },
+        {
+          "client_id": "712869220822-vaeb44a4n1ia7pno1s75qdf19tvs2i2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5m99MOQPOAauW7rPfoYKNV5Kz0wtTYfg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

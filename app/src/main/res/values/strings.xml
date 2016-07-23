@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PuzzleAlarm</string>
+    <string name="facebook_app_id">537769393088887</string>
+    <string name="INSTAGRAM_CLIENT_ID"></string>
 </resources>
