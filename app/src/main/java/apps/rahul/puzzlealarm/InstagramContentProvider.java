@@ -13,13 +13,31 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import android.content.Intent;
+import android.view.View;
+import android.app.Activity;
 
-public class InstagramClient{
+
+public class InstagramContentProvider implements IContentProvider{
 
 
     private InstagramLoginDialog instagramLoginDialog;
     private String instagramAccessToken;
     private String authenticationUrl;
+    private Activity callingActivity;
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        // Do nothing....
+    }
+
+    public void setUpUI(View v)
+    {
+        instagramLoginDialog.show();
+    }
+
+
 
     private Context mContext;
 
@@ -55,7 +73,6 @@ public class InstagramClient{
 
 
 
-
     public interface InstagramClientCallback
     {
         public  void onComplete(String  result);
@@ -64,12 +81,30 @@ public class InstagramClient{
 
 
 
+
+
     public String getOAuthToken()
     {
         return this.instagramAccessToken;
     }
 
-    public InstagramClient(Context context, InstagramClientCallback listener)
+    public void getBitmapAsync(Helper.PostHandleAsyncTaskGetBitmap callback)
+    {
+
+    }
+
+
+    public InstagramContentProvider(Activity callingActivity)
+    {
+        this.callingActivity = callingActivity;
+        Context context = callingActivity;
+        this.authenticationUrl = INSTAGRAM_AUTH_URL_PREFIX + "oauth/authorize/" +
+                "?client_id=" + context.getString(R.string.INSTAGRAM_CLIENT_ID)
+                + "&redirect_uri=" + context.getString(R.string.INSTAGRAM_REDIRECT_URL) + "&response_type=token&display=touch";
+        instagramLoginDialog  = new InstagramLoginDialog(context , authenticationUrl, this);
+    }
+
+    public InstagramContentProvider(Context context, InstagramClientCallback listener)
     {
         this.mContext = context;
         this.authenticationUrl = INSTAGRAM_AUTH_URL_PREFIX + "oauth/authorize/" +

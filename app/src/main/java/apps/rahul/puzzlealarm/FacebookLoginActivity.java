@@ -48,6 +48,8 @@ public class FacebookLoginActivity extends AppCompatActivity {
 
 
 
+
+
     private class GetBitmapAsync implements Helper.PostHandleAsyncTaskGetBitmap
     {
         public void toExecuteDelegate(Bitmap bitmap)
@@ -107,8 +109,6 @@ public class FacebookLoginActivity extends AppCompatActivity {
     private LoginButton loginButton;
     private CallbackManager callBackManager;
     private ImageView facebookPicture;
-
-
 
     private int user_id;
     private AccessToken userToken;
@@ -222,18 +222,28 @@ public class FacebookLoginActivity extends AppCompatActivity {
 
         callBackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)this.findViewById(R.id.facebookLoginButton);
-        loginButton.setReadPermissions("email");
-        loginButton.setReadPermissions("user_photos");
-        // loginButton.setAct
 
+        // loginButton.setAct
+        loginButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d(Application.TAG, "Clicked Facebook Sign In");
+                    loginButton.setReadPermissions("email");
+                   loginButton.setReadPermissions("user_photos");
+                Log.d(Application.TAG, "Assigned the permissions");
+//                FacebookContentProvider provider = new FacebookContentProvider();
+ //               provider.setUpUI(loginButton);
+   //             Application.loggedInProviders.add(provider);
+            }
+        });
         loginButton.registerCallback(callBackManager, new FacebookCallback<LoginResult>()
         {
             @Override
             public void onSuccess(LoginResult result)
             {
                  userToken = result.getAccessToken();
-
-
                 Log.d(PuzzleActivity.TAG, "Succesful! Id = " + userToken.getUserId() + " and permissions " + userToken.getPermissions()
                          + " and expiry = " + userToken.getExpires());
 

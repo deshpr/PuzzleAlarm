@@ -14,7 +14,6 @@ import android.util.Log;
 
 public  class Helper {
 
-
     static Random random;
 
     public  static int getRandomNumber(int start, int end)
@@ -25,16 +24,14 @@ public  class Helper {
     }
 
     public interface PostHandleAsyncTaskGetBitmap{
-       public  void toExecuteDelegate(Bitmap bitmap);
+       public void toExecuteDelegate(Bitmap bitmap);
     }
-
 
     public static void GetBitmapAsync(PostHandleAsyncTaskGetBitmap instance, String url)
     {
         Helper.GetPictureFromUrlAsync asyncTask =  new Helper.GetPictureFromUrlAsync();
         asyncTask.asyncTaskHandler = instance;
         asyncTask.execute(url);
-
     }
 
     private static class GetPictureFromUrlAsync extends AsyncTask<String, Void, Bitmap>
@@ -42,7 +39,6 @@ public  class Helper {
         public PostHandleAsyncTaskGetBitmap asyncTaskHandler;
 
         public Bitmap  pictureBitmap;
-
 
         public static  GetPictureFromUrlAsync getInstance(){
             return new GetPictureFromUrlAsync();

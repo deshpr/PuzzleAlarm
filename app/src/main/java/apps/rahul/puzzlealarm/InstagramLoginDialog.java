@@ -41,10 +41,10 @@ public class InstagramLoginDialog  extends Dialog{
 
 
 
-    public InstagramClient.InstagramClientCallback mOAuthDialogListener;
+    public InstagramContentProvider.InstagramClientCallback mOAuthDialogListener;
     private  ProgressDialog progrssSpinner;
 
-    public InstagramLoginDialog(Context context, String url, InstagramClient.InstagramClientCallback listener)
+    public InstagramLoginDialog(Context context, String url, InstagramContentProvider.InstagramClientCallback listener)
     {
         super(context);
         this.authenticationUrl = url;
