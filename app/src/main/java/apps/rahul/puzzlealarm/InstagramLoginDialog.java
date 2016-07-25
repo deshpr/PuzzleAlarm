@@ -41,10 +41,10 @@ public class InstagramLoginDialog  extends Dialog{
 
 
 
-    public InstagramContentProvider.InstagramClientCallback mOAuthDialogListener;
+    public Helper.PostAsyncTaskCallback mOAuthDialogListener;
     private  ProgressDialog progrssSpinner;
 
-    public InstagramLoginDialog(Context context, String url, InstagramContentProvider.InstagramClientCallback listener)
+    public InstagramLoginDialog(Context context, String url, Helper.PostAsyncTaskCallback listener)
     {
         super(context);
         this.authenticationUrl = url;
@@ -112,12 +112,11 @@ public class InstagramLoginDialog  extends Dialog{
 
             if(url.startsWith(InstagramLoginDialog.this.getContext().getString(R.string.INSTAGRAM_REDIRECT_URL)))
             {
-
                 Log.d(PuzzleActivity.TAG, "Got the result with URL = " + url);
                 String[] urls = url.split("=");
                 authorizationToken = urls[1];
                 Log.d(PuzzleActivity.TAG, "The token = " + authorizationToken);
-                mOAuthDialogListener.onComplete(authorizationToken);
+                mOAuthDialogListener.onComplete(new String[]{authorizationToken});
                 InstagramLoginDialog.this.dismiss();;
                 return true;
             }

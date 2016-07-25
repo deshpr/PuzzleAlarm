@@ -16,6 +16,13 @@ public  class Helper {
 
     static Random random;
 
+
+    public interface PostAsyncTaskCallback
+    {
+        public void onComplete(Object... object);
+        public void onError(Object errorInfo);
+    }
+
     public  static int getRandomNumber(int start, int end)
     {
         random = new  Random();

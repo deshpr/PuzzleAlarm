@@ -47,9 +47,6 @@ public class FacebookLoginActivity extends AppCompatActivity {
     public static final String PUZZLE_BITMAP_URL_KEY = "puzzleBitmapUrl";
 
 
-
-
-
     private class GetBitmapAsync implements Helper.PostHandleAsyncTaskGetBitmap
     {
         public void toExecuteDelegate(Bitmap bitmap)
@@ -233,9 +230,6 @@ public class FacebookLoginActivity extends AppCompatActivity {
                     loginButton.setReadPermissions("email");
                    loginButton.setReadPermissions("user_photos");
                 Log.d(Application.TAG, "Assigned the permissions");
-//                FacebookContentProvider provider = new FacebookContentProvider();
- //               provider.setUpUI(loginButton);
-   //             Application.loggedInProviders.add(provider);
             }
         });
         loginButton.registerCallback(callBackManager, new FacebookCallback<LoginResult>()

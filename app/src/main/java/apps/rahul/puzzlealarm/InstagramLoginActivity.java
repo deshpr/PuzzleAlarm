@@ -14,7 +14,7 @@ import org.json.JSONObject;
 /**
  * Created by Rahul on 7/23/2016.
  */
-public class InstagramLoginActivity extends AppCompatActivity  implements InstagramClient.InstagramClientCallback{
+public class InstagramLoginActivity extends AppCompatActivity {
 
     private String  instagramUserToken;
 
@@ -31,7 +31,7 @@ public class InstagramLoginActivity extends AppCompatActivity  implements Instag
         Log.d(PuzzleActivity.TAG, "Error = " + error);
     }
 
-    private InstagramClient client;
+    private InstagramContentProvider client;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -44,19 +44,20 @@ public class InstagramLoginActivity extends AppCompatActivity  implements Instag
             @Override
             public void onClick(View v)
             {
-                client = new InstagramClient(InstagramLoginActivity.this, InstagramLoginActivity.this);
+                client = new InstagramContentProvider(InstagramLoginActivity.this);
                 Log.d(PuzzleActivity.TAG, "Created  the client");
             }
         });
 
         Button getUserMedia = (Button)this.findViewById(R.id.instagramGetUserMedia);
+        /*
         getUserMedia.setOnClickListener(new View.OnClickListener()
         {
 
             @Override
             public void onClick(View v)
             {
-                client.getCurrentUserMedia(instagramUserToken, new InstagramClient.InstagramClientCallback() {
+                client.getCurrentUserMedia(instagramUserToken, Helper.InstagramClientCallback() {
                     @Override
                     public void onComplete(String result) {
                         Log.d(PuzzleActivity.TAG, "User media json = "  + result);
@@ -90,7 +91,7 @@ public class InstagramLoginActivity extends AppCompatActivity  implements Instag
                     }
                 });
             }
-        });
+        }); */
     }
 
 }
